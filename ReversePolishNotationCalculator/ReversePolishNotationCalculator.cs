@@ -1,25 +1,68 @@
-﻿namespace ReversePolishNotationCalculator
+﻿using System;
+using System.Collections.Generic;
+using ReversePolishNotationCalculator.Operators;
+
+namespace ReversePolishNotationCalculator
 {
+    
     public class ReversePolishNotationCalculator
     {
+        private static readonly Dictionary<string,IOperator> OPERATORS = new ()
+        {
+            ["*"] = new MultiplyOperator(),
+            ["/"] = new DivideOperator(),
+            ["+"] = new PlusOperator(),
+            ["-"] = new MinusOperator(),
+            ["sqrt"] = new SquareRootOperator(),
+        };
+        
         public double Compute(string polishNotationExpression)
         {
+            var computeStack = new Stack<double>();
+
             string[] tokens = polishNotationExpression.Split(" ");
 
-            double leftOperand = double.Parse(tokens[0]);
-            double rightOperand = double.Parse(tokens[1]);
-
-            string op = tokens[2];
-
-            return op switch
+            foreach (var token in tokens)
             {
-                "+" => leftOperand + rightOperand,
-                "-" => leftOperand - rightOperand,
-                "*" => leftOperand * rightOperand,
-                "/" => leftOperand / rightOperand,
-                _ => throw new UnsupportedOperatorException($"Operator \"{op}\" is not supported by the calculator")
-            };
+                if (!IsOperator(token))
+                {
+                    AddOperandOnStack(computeStack, token);
+                }
+                else
+                {
+                    ExecuteComputation(computeStack, token);
+                }
+            }
+
+            return computeStack.Pop();
+        }
+
+        private static void AddOperandOnStack(Stack<double> computeStack, string token)
+        {
+            try
+            {
+                computeStack.Push(double.Parse(token));
+            }
+            catch (FormatException)
+            {
+                throw new MalformedExpressionException();
+            }
+        }
+
+        private static void ExecuteComputation(Stack<double> computationStack, string token)
+        {
+            if (!OPERATORS.ContainsKey(token))
+            {
+                throw new MalformedExpressionException();
+            }
+            
+            var operation = OPERATORS[token];
+            operation.Execute(computationStack);
+        }
+
+        private static bool IsOperator(string token)
+        {
+            return OPERATORS.ContainsKey(token);
         }
     }
 }
-
