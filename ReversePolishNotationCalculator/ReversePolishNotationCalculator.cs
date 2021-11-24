@@ -14,6 +14,8 @@ namespace ReversePolishNotationCalculator
             ["+"] = new PlusOperator(),
             ["-"] = new MinusOperator(),
             ["sqrt"] = new SquareRootOperator(),
+            ["min"] = new MinOperator(),
+            ["max"] = new MaxOperator(),
         };
         
         public double Compute(string polishNotationExpression)
@@ -32,6 +34,11 @@ namespace ReversePolishNotationCalculator
                 {
                     ExecuteComputation(computeStack, token);
                 }
+            }
+
+            if (computeStack.Count > 1)
+            {
+                throw new MalformedExpressionException();
             }
 
             return computeStack.Pop();

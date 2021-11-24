@@ -75,6 +75,68 @@ namespace ReversePolishNotationCalculator.Test
             // Then
             Assert.AreEqual(2, result);
         }
+        
+        [Test]
+        public void Compute_UnaryOperatorCombinedWithBinary_ReturnRightResult()
+        {
+            // Given
+            string expression = "4 sqrt 5 +";
+
+            // When
+            var result = calculator.Compute(expression);
+
+            // Then
+            Assert.AreEqual(7, result);
+        }
+        
+        [Test]
+        public void Compute_UnaryOperatorTwoOperands_ThrowsException()
+        {
+            // Given
+            string expression = "4 5 sqrt";
+
+            // When & Then
+            Assert.Throws<MalformedExpressionException>(() => calculator.Compute(expression));
+        }
+        
+        [Test]
+        public void Compute_NAryOperatorMax_ReturnsRightResult()
+        {
+            // Given
+            string expression = "4 20 38 7 25 max";
+
+            // When
+            var result = calculator.Compute(expression);
+
+            // Then
+            Assert.AreEqual(38, result);
+        }
+        
+        [Test]
+        public void Compute_NAryOperatorMaxCombinedBinary_ReturnsRightResult()
+        {
+            // Given
+            string expression = "4 20 38 7 25 max 2 +";
+
+            // When
+            var result = calculator.Compute(expression);
+
+            // Then
+            Assert.AreEqual(40, result);
+        }
+        
+        [Test]
+        public void Compute_NAryOperatorMin_ReturnsRightResult()
+        {
+            // Given
+            string expression = "4 20 38 7 25 min";
+
+            // When
+            var result = calculator.Compute(expression);
+
+            // Then
+            Assert.AreEqual(4, result);
+        }
     }
 }
 
