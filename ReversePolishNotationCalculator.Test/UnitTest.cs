@@ -33,12 +33,22 @@ namespace ReversePolishNotationCalculator.Test
             // Given
             var expression = "2 20 ù";
 
-            // When
-            Action a = () => calculator.Compute(expression);
-            
-            // Then
-            Assert.Throws<UnsupportedOperatorExce>()
+            // When & Then
+            Assert.Throws<UnsupportedOperatorException>(
+                () => calculator.Compute(expression)
+            );
+        }
 
+        [Test]
+        [TestCase("1 b +")]
+        [TestCase("a 1 +")]
+        [TestCase("a b +")]
+        public void Compute_OperandAreNotNumber_ThrowsException(string expression)
+        {
+            // When & Then
+            Assert.Throws<OperandIsNotANumberException>(
+                () => calculator.Compute(expression)
+            );
         }
     }
 }

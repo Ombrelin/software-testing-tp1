@@ -16,7 +16,8 @@
                 "+" => leftOperand + rightOperand,
                 "-" => leftOperand - rightOperand,
                 "*" => leftOperand * rightOperand,
-                "/" => leftOperand / rightOperand
+                "/" => leftOperand / rightOperand,
+                _ => throw new UnsupportedOperatorException($"Operator \"{op}\" is not supported by the calculator")
             };
         }
     }
